@@ -1,7 +1,12 @@
 
+import PageTitle from "../../components/PageTitle";
+
 function UsersList() {
   return (
-    <div>UsersList</div>
+    <div>
+      <PageTitle title="Users | Admin" />
+      UsersList
+    </div>
   )
 }
 

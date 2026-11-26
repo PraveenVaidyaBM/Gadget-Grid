@@ -2,6 +2,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
+import { HelmetProvider } from "react-helmet-async";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -26,7 +28,6 @@ import Login from "./screens/Login.jsx";
 import Register from "./screens/Register.jsx";
 import Shipping from "./screens/Shipping.jsx";
 import PrivateRoutes from "./components/PrivateRoutes.jsx";
-import Payment from "./screens/Payment.jsx";
 import PlaceOrder from "./screens/PlaceOrder.jsx";
 import Order from "./screens/Orders.jsx";
 import Profile from "./screens/Profile.jsx";
@@ -41,13 +42,14 @@ const router = createBrowserRouter(
     <Route path="/*" element={<App />}>
       <Route index element={<Home />} />
       <Route path="page/:pageNumber" element={<Home />} />
+      <Route path="search/:keyword" element={<Home />} />
+      <Route path="search/:keyword/page/:pageNumber" element={<Home />} />
       <Route path="register" element={<Register />} />
       <Route path="login" element={<Login />} />
       <Route path="product/:id" element={<ProductDetails />} />
       <Route path="cart" element={<Cart />} />
       <Route path="" element={<PrivateRoutes />}>
         <Route path="shipping" element={<Shipping />} />
-        <Route path="payment" element={<Payment />} />
         <Route path="placeorder" element={<PlaceOrder />} />
         <Route path="order/:id" element={<Order />} />
         <Route path="profile" element={<Profile />} />
@@ -55,6 +57,10 @@ const router = createBrowserRouter(
       <Route path="" element={<AdminRoute />}>
         <Route path="admin/userlist" element={<UsersList />} />
         <Route path="admin/productslist" element={<ProductsList />} />
+        <Route
+          path="admin/productlist/:pageNumber"
+          element={<ProductsList />}
+        />
         <Route path="admin/orderlist" element={<OrderList />} />
       </Route>
     </Route>,
@@ -64,8 +70,12 @@ const router = createBrowserRouter(
 // Render the application
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
+    <HelmetProvider>
+      <Provider store={store}>
+        <PayPalScriptProvider deferLoading={true}>
+          <RouterProvider router={router} />
+        </PayPalScriptProvider>
+      </Provider>
+    </HelmetProvider>
   </StrictMode>,
 );

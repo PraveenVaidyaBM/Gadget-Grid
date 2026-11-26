@@ -2,6 +2,7 @@ import { Row, Col, Button, Form } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import FormContainer from "../components/FormContainer";
 import Loader from "../components/Loader";
+import PageTitle from "../components/PageTitle";
 import useLoginForm from "../hooks/useLoginForm";
 
 function Login() {
@@ -10,6 +11,7 @@ function Login() {
 
   return (
     <FormContainer>
+      <PageTitle title="Sign In" />
       <h1>Sign In</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="email" className="my-3">

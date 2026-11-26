@@ -2,6 +2,7 @@ import { Row, Col, Button, Form } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import FormContainer from "../components/FormContainer";
 import Loader from "../components/Loader";
+import PageTitle from "../components/PageTitle";
 import { STRONG_PASSWORD_PATTERN } from "../utils/constant";
 import useRegisterForm from "../hooks/useRegisterForm";
 
@@ -11,6 +12,7 @@ function Register() {
 
   return (
     <FormContainer>
+      <PageTitle title="Create Account" />
       <h1>Sign Up</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="name" className="my-3">

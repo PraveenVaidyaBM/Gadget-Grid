@@ -13,3 +13,13 @@ export const INITIAL_FORM = {
   password: "",
   confirmPassword: "",
 };
+
+export const INITIAL_PRODUCT_FORM = {
+  name: "",
+  image: "",
+  description: "",
+  brand: "",
+  category: "",
+  price: "",
+  countInStock: "",
+};

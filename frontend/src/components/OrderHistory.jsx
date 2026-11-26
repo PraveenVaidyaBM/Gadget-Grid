@@ -48,14 +48,14 @@ function OrderHistory() {
                   {order.isPaid ? (
                     new Date(order.paidAt).toLocaleDateString()
                   ) : (
-                    <FaTimes style={{ color: "red" }} />
+                    <FaTimes className="order-status-missing" />
                   )}
                 </td>
                 <td>
                   {order.isDelivered ? (
                     new Date(order.deliveredAt).toLocaleDateString()
                   ) : ( 
-                    <FaTimes style={{ color: "red" }} />
+                    <FaTimes className="order-status-missing" />
                   )}
                 </td>
                 <td>

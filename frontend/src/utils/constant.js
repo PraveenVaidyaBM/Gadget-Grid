@@ -6,7 +6,6 @@ export const PAYPAL_URL = `${BASE_URL}/api/config/paypal`;
 
 export const STRONG_PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-
 export const INITIAL_FORM = {
   name: "",
   email: "",
@@ -22,4 +21,12 @@ export const INITIAL_PRODUCT_FORM = {
   category: "",
   price: "",
   countInStock: "",
+};
+
+export const EMPTY_USER_FORM = {
+  name: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  isAdmin: false,
 };

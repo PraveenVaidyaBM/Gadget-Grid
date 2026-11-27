@@ -7,6 +7,7 @@ import { Button, Row, Col, ListGroup, Image, Card } from "react-bootstrap";
 import CheckoutSteps from "../components/CheckoutSteps";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import PageTitle from "../components/PageTitle";
 
 function PlaceOrder() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ function PlaceOrder() {
 
   return (
     <>
+      <PageTitle title="Place Order" />
       <CheckoutSteps step1 step2 step3 step4 />
       <Row>
         <Col md={8}>
@@ -121,24 +123,24 @@ function PlaceOrder() {
                   </Col>
                 </Row>
               </ListGroup.Item>
-              {error && (
-                <ListGroup.Item>
-                  <Message variant="danger">
-                    {error.data.message || error.error}
-                  </Message>
-                </ListGroup.Item>
-              )}
-              <ListGroup.Item>
+              <ListGroup.Item className="p-3">
                 <Button
                   type="button"
-                  className="w-100 btn-block"
-                  disabled={cart.cartItems.length === 0}
+                  className="w-100"
+                  disabled={cart.cartItems.length === 0 || isLoading}
                   onClick={placeOrderHandler}
                 >
                   Place Order
                 </Button>
                 {isLoading && <Loader />}
               </ListGroup.Item>
+              {error && (
+                <ListGroup.Item>
+                  <Message variant="danger">
+                    {error?.data?.message || error?.error || "Order failed."}
+                  </Message>
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>

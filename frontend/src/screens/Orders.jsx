@@ -6,6 +6,7 @@ import { Row, Col, Card, ListGroup, Image, Button } from "react-bootstrap";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import PageTitle from "../components/PageTitle";
+import PayPal from "../components/PayPal";
 import useOrderDetails from "../hooks/useOrderDetails";
 
 function Order() {
@@ -15,6 +16,13 @@ function Order() {
     error,
     isDelivering,
     orderDeliveryHandler,
+    isPaying,
+    isPending,
+    paypal,
+    loadingPaypal,
+    errorPaypal,
+    paypalError,
+    paymentSuccessHandler,
   } = useOrderDetails();
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -140,6 +148,20 @@ function Order() {
                       </Col>
                     </Row>
                   </ListGroup.Item>
+                  {!order.isPaid && order.paymentMethod === "PayPal" && (
+                    <ListGroup.Item>
+                      <PayPal
+                        orderId={order._id}
+                        amount={order.totalPrice}
+                        isProcessing={isPaying}
+                        isLoadingConfig={loadingPaypal}
+                        configError={errorPaypal ? paypalError : null}
+                        clientId={paypal?.clientId}
+                        onPaymentSuccess={paymentSuccessHandler}
+                      />
+                    </ListGroup.Item>
+                  )}
+                  {(isPaying|| isPending) && <Loader />}
                   {isDelivering && <Loader />}
                   {userInfo &&
                     userInfo.isAdmin &&

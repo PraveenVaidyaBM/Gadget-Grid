@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { INITIAL_FORM, STRONG_PASSWORD_PATTERN } from "../utils/constant";
 import { setCredentials } from "../slices/authSlice";
-import { useRegisterMutation } from "../slices/usersApiSlice";
+import { useRegisterMutation } from "../slices/userSlice";
 import useFormState from "./useFormState";
 
 const useRegisterForm = () => {

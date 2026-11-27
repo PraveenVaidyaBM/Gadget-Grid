@@ -2,7 +2,7 @@ import { Button, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaTimes} from "react-icons/fa";
 
-import { useGetMyOrdersQuery } from "../slices/oderAPiSlice";
+import { useGetMyOrdersQuery } from "../slices/orderSlice";
 import Loader from "./Loader";
 import Message from "./Message";
 

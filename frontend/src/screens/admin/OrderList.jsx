@@ -3,7 +3,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-import { useGetOrdersQuery } from "../../slices/oderAPiSlice";
+import { useGetOrdersQuery } from "../../slices/orderSlice";
 
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";

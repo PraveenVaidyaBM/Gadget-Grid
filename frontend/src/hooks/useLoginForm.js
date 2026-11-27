@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { setCredentials } from "../slices/authSlice";
-import { useLoginMutation } from "../slices/usersApiSlice";
+import { useLoginMutation } from "../slices/userSlice";
 import useFormState from "./useFormState";
 
 const useLoginForm = () => {

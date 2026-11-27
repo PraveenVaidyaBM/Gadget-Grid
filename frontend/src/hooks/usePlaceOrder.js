@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { clearCart } from "../slices/cartSlice";
-import { useCreateOrderMutation } from "../slices/oderAPiSlice";
+import { useCreateOrderMutation } from "../slices/orderSlice";
 
 export const usePlaceOrder = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [createOrder, { isLoading, error }] = useCreateOrderMutation();
   const cart = useSelector((state) => state.cart);
   const { shippingAddress, paymentMethod, cartItems } = cart;
+  const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
   const placeOrderHandler = async () => {
     try {

@@ -129,7 +129,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 
 export const getUsers = asyncHandler(async (req, res) => {
-  const pageSize = 8;
+  const pageSize = process.env.PAGINATION_LIMIT;;
   const requestedPage = Number.parseInt(req.query.pageNumber, 10);
   const pageNumber = Number.isInteger(requestedPage)
     ? Math.max(requestedPage, 1)

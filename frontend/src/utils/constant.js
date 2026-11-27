@@ -15,7 +15,7 @@ export const INITIAL_FORM = {
 
 export const INITIAL_PRODUCT_FORM = {
   name: "",
-  image: "",
+  imageFile: null,
   description: "",
   brand: "",
   category: "",

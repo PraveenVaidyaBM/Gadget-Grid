@@ -1,7 +1,6 @@
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaTimes, FaEdit, FaTrash } from "react-icons/fa";
 import { Button, Col, Image, Row, Table } from "react-bootstrap";
-import { useGetProductsQuery } from "../../slices/productSlice";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import Paginate from "../../components/Paginate";
@@ -10,23 +9,23 @@ import CreateProductModal from "../../components/CreateProductModal";
 import useProductDetails from "../../hooks/useProductDetails";
 
 function ProductsList() {
-  const { pageNumber } = useParams();
   const {
     data,
     isLoading,
     error,
-    refetch: refetchProducts,
-  } = useGetProductsQuery({ pageNumber });
-  const {
-    createProduct,
-    isCreating,
+    saveProduct,
+    isSaving,
+    deleteProduct,
+    isDeleting,
+    editingProduct,
     productForm,
-    createErrorMessage,
+    productFormErrorMessage,
     showCreateProductModal,
     openCreateProductModal,
+    openEditProductModal,
     closeCreateProductModal,
     handleProductFormChange,
-  } = useProductDetails({ refetchProducts });
+  } = useProductDetails();
 
   return (
     <>
@@ -103,11 +102,20 @@ function ProductsList() {
                     variant="outline-primary"
                     size="sm"
                     className="me-2"
+                    aria-label={`Edit ${product.name}`}
+                    onClick={() => openEditProductModal(product)}
                   >
                     <FaEdit className="me-1" />
                   </Button>
-                   <Button type="button" variant="outline-primary" size="sm">
-                    <FaTrash className="m-1" />
+                  <Button
+                    type="button"
+                    variant="outline-danger"
+                    size="sm"
+                    aria-label={`Delete ${product.name}`}
+                    disabled={isDeleting}
+                    onClick={() => deleteProduct(product)}
+                  >
+                    <FaTrash className="text-danger m-1" />
                   </Button>
                 </td>
               </tr>
@@ -124,11 +132,12 @@ function ProductsList() {
       <CreateProductModal
         show={showCreateProductModal}
         onHide={closeCreateProductModal}
+        product={editingProduct}
         productForm={productForm}
         onChange={handleProductFormChange}
-        onSubmit={createProduct}
-        isCreating={isCreating}
-        error={createErrorMessage}
+        onSubmit={saveProduct}
+        isSaving={isSaving}
+        error={productFormErrorMessage}
       />
     </>
   );

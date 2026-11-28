@@ -1,26 +1,40 @@
-import { Link, useParams } from "react-router-dom";
-import {
-  Row,
-  Col,
-  Card,
-  ListGroup,
-  Image,
-} from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-import { useGetOrderDetailsQuery } from "../slices/oderAPiSlice";
+import { Row, Col, Card, ListGroup, Image, Button } from "react-bootstrap";
+
 import Message from "../components/Message";
 import Loader from "../components/Loader";
+import PageTitle from "../components/PageTitle";
+import PayPal from "../components/PayPal";
+import useOrderDetails from "../hooks/useOrderDetails";
 
 function Order() {
-  const { id: orderId } = useParams();
-  const { data: order, isLoading, error } = useGetOrderDetailsQuery(orderId);
+  const {
+    order,
+    isLoading,
+    error,
+    isDelivering,
+    orderDeliveryHandler,
+    isPaying,
+    isPending,
+    paypal,
+    loadingPaypal,
+    errorPaypal,
+    paypalError,
+    paymentSuccessHandler,
+  } = useOrderDetails();
+  const { userInfo } = useSelector((state) => state.auth);
 
   return (
     <>
+      <PageTitle title={order?._id ? `Order ${order._id}` : "Order"} />
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Message variant="danger">
+          {error?.data?.message || error?.error || "Could not load order."}
+        </Message>
       ) : (
         <>
           <h1>Order: {order._id}</h1>
@@ -44,7 +58,8 @@ function Order() {
                   </p>
                   {order.isDelivered ? (
                     <Message variant="success">
-                      Delivered on {order.deliveredAt}
+                      Delivered on{" "}
+                      {new Date(order.deliveredAt).toLocaleDateString()}
                     </Message>
                   ) : (
                     <Message variant="warning">Not delivered yet</Message>
@@ -56,7 +71,9 @@ function Order() {
                     <strong>Method:</strong> {order.paymentMethod}
                   </p>
                   {order.isPaid ? (
-                    <Message variant="success">Paid on {order.paidAt}</Message>
+                    <Message variant="success">
+                      Paid on {new Date(order.paidAt).toLocaleDateString()}
+                    </Message>
                   ) : (
                     <Message variant="warning">Not paid yet</Message>
                   )}
@@ -123,10 +140,44 @@ function Order() {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <Row>
-                      <Col><strong>Total</strong></Col>
-                      <Col><strong>${order.totalPrice.toFixed(2)}</strong></Col>
+                      <Col>
+                        <strong>Total</strong>
+                      </Col>
+                      <Col>
+                        <strong>${order.totalPrice.toFixed(2)}</strong>
+                      </Col>
                     </Row>
                   </ListGroup.Item>
+                  {!order.isPaid && order.paymentMethod === "PayPal" && (
+                    <ListGroup.Item>
+                      <PayPal
+                        orderId={order._id}
+                        amount={order.totalPrice}
+                        isProcessing={isPaying}
+                        isLoadingConfig={loadingPaypal}
+                        configError={errorPaypal ? paypalError : null}
+                        clientId={paypal?.clientId}
+                        onPaymentSuccess={paymentSuccessHandler}
+                      />
+                    </ListGroup.Item>
+                  )}
+                  {(isPaying|| isPending) && <Loader />}
+                  {isDelivering && <Loader />}
+                  {userInfo &&
+                    userInfo.isAdmin &&
+                    order.isPaid &&
+                    !order.isDelivered && (
+                      <ListGroup.Item>
+                        <Button
+                          type="button"
+                          className="btn btn-block"
+                          disabled={isDelivering}
+                          onClick={orderDeliveryHandler}
+                        >
+                          Mark as Delivered
+                        </Button>
+                      </ListGroup.Item>
+                    )}
                 </ListGroup>
               </Card>
             </Col>

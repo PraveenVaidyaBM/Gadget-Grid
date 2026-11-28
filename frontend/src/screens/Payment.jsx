@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Form, Button, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import FormContainer from "../components/FormContainer";
 import CheckoutSteps from "../components/CheckoutSteps";
+import PageTitle from "../components/PageTitle";
 import usePayment from "../hooks/usePayment";
 
 function Payment() {
@@ -23,6 +24,7 @@ function Payment() {
 
   return (
     <FormContainer>
+      <PageTitle title="Payment" />
       <CheckoutSteps step1 step2 step3 />
       <h1>Payment Method</h1>
       <Form onSubmit={submitHandler}>

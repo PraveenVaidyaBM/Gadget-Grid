@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 import { setCredentials } from "../slices/authSlice";
-import { useProfileMutation } from "../slices/usersApiSlice";
+import { useProfileMutation } from "../slices/userSlice";
 import { INITIAL_FORM, STRONG_PASSWORD_PATTERN } from "../utils/constant";
 import useFormState from "./useFormState";
 

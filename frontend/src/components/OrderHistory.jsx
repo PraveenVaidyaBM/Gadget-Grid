@@ -2,7 +2,7 @@ import { Button, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaTimes} from "react-icons/fa";
 
-import { useGetMyOrdersQuery } from "../slices/oderAPiSlice";
+import { useGetMyOrdersQuery } from "../slices/orderSlice";
 import Loader from "./Loader";
 import Message from "./Message";
 
@@ -48,14 +48,14 @@ function OrderHistory() {
                   {order.isPaid ? (
                     new Date(order.paidAt).toLocaleDateString()
                   ) : (
-                    <FaTimes style={{ color: "red" }} />
+                    <FaTimes className="order-status-missing" />
                   )}
                 </td>
                 <td>
                   {order.isDelivered ? (
                     new Date(order.deliveredAt).toLocaleDateString()
                   ) : ( 
-                    <FaTimes style={{ color: "red" }} />
+                    <FaTimes className="order-status-missing" />
                   )}
                 </td>
                 <td>

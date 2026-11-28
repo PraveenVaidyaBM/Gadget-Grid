@@ -1,17 +1,20 @@
 import { Table, Button } from "react-bootstrap";
-import LinkContainer from "react-router-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import { FaTimes } from "react-icons/fa";
-import { useGetOrdersQuery } from "../../slices/oderAPiSlice";
+import { Link } from "react-router-dom";
+
+import { useGetOrdersQuery } from "../../slices/orderSlice";
 
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
-import { Link } from "react-router-dom";
+import PageTitle from "../../components/PageTitle";
 
 function OrderList() {
   const { data: orders, isLoading, error } = useGetOrdersQuery();
 
   return (
     <>
+      <PageTitle title="Orders | Admin" />
       <h1>Orders</h1>
       {isLoading ? (
         <Loader />
@@ -41,14 +44,14 @@ function OrderList() {
                   {order.isPaid ? (
                     new Date(order.paidAt).toLocaleDateString()
                   ) : (
-                    <FaTimes style={{ color: "red" }} />
+                    <FaTimes className="order-status-missing" />
                   )}
                 </td>
                 <td>
                   {order.isDelivered ? (
                     new Date(order.deliveredAt).toLocaleDateString()
                   ) : (
-                    <FaTimes style={{ color: "red" }} />
+                    <FaTimes className="order-status-missing" />
                   )}
                 </td>
                 <td>

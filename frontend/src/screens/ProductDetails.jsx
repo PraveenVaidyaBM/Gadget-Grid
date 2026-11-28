@@ -6,6 +6,7 @@ import { useGetProductByIdQuery } from "../slices/productSlice";
 import { Row, Col, Image, ListGroup, Button, Form } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 // components
+import PageTitle from "../components/PageTitle";
 import Rating from "../components/Rating";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
@@ -27,10 +28,11 @@ const ProductDetails = () => {
     () => product?.image || product?.thumbnail || product?.images?.[0],
     [product],
   );
-  const { qty, setQty, addToCartHandler } = useProductDetails(product);
+  const { qty, setQty, addToCartHandler } = useProductDetails({ product });
 
   return (
     <>
+      <PageTitle title={product?.name || "Product"} />
       {isLoading ? (
         <Loader />
       ) : error ? (

@@ -124,34 +124,121 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Get User
-// @route   GET /api/user/profile
+// @desc    Get Users
+// @route   GET /api/users
 // @access  Private/Admin
 
 export const getUsers = asyncHandler(async (req, res) => {
-  res.send("Get all User");
+  const pageSize = process.env.PAGINATION_LIMIT;;
+  const requestedPage = Number.parseInt(req.query.pageNumber, 10);
+  const pageNumber = Number.isInteger(requestedPage)
+    ? Math.max(requestedPage, 1)
+    : 1;
+  const count = await User.countDocuments({});
+  const users = await User.find({})
+    .select("-password")
+    .sort({ createdAt: -1 })
+    .limit(pageSize)
+    .skip(pageSize * (pageNumber - 1));
+
+  res.json({
+    users,
+    pageNumber,
+    pages: Math.ceil(count / pageSize),
+  });
 });
 
 // @desc    Get User By ID
-// @route   GET /api/user/:id
+// @route   GET /api/users/:id
 // @access  Private/Admin
 
 export const getUsersById = asyncHandler(async (req, res) => {
-  res.send("Get User By Id");
+  const user = await User.findById(req.params.id).select("-password");
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found.");
+  }
+
+  res.json(user);
 });
 
 // @desc    Delete User
-// @route   DELETE /api/user/:id
+// @route   DELETE /api/users/:id
 // @access  Private/Admin
 
 export const deleteUser = asyncHandler(async (req, res) => {
-  res.send("Delete User");
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found.");
+  }
+  if (user.isAdmin) {
+    res.status(400);
+    throw new Error("Administrator accounts cannot be deleted.");
+  }
+  if (user._id.toString() === req.user._id.toString()) {
+    res.status(400);
+    throw new Error("You cannot delete your own account.");
+  }
+
+  await user.deleteOne();
+  res.json({ message: "User removed." });
 });
 
 // @desc    Update User
-// @route   PUT /api/user/:id
+// @route   PUT /api/users/:id
 // @access  Private/Admin
 
 export const updateUser = asyncHandler(async (req, res) => {
-  res.send("Update User");
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found.");
+  }
+
+  const name = typeof req.body.name === "string" ? req.body.name.trim() : "";
+  const email =
+    typeof req.body.email === "string" ? req.body.email.trim() : "";
+  if (!name || !email) {
+    res.status(400);
+    throw new Error("Name and email are required.");
+  }
+  if (typeof req.body.isAdmin !== "boolean") {
+    res.status(400);
+    throw new Error("Administrator status must be true or false.");
+  }
+
+  const existingUser = await User.findOne({
+    email,
+    _id: { $ne: user._id },
+  });
+  if (existingUser) {
+    res.status(400);
+    throw new Error("Email is already in use.");
+  }
+
+  if (req.body.password !== undefined && req.body.password !== "") {
+    if (
+      typeof req.body.password !== "string" ||
+      !STRONG_PASSWORD_PATTERN.test(req.body.password)
+    ) {
+      res.status(400);
+      throw new Error(
+        "Password must be at least 8 characters and include uppercase and lowercase letters, a number, and a special character.",
+      );
+    }
+    user.password = req.body.password;
+  }
+
+  user.name = name;
+  user.email = email;
+  user.isAdmin = req.body.isAdmin;
+  const updatedUser = await user.save();
+
+  res.json({
+    _id: updatedUser._id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    isAdmin: updatedUser.isAdmin,
+  });
 });

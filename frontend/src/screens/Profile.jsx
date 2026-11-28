@@ -1,6 +1,7 @@
 import { Button, Col, Form, FormGroup, Row } from "react-bootstrap";
 import Loader from "../components/Loader";
 import OrderHistory from "../components/OrderHistory";
+import PageTitle from "../components/PageTitle";
 import { STRONG_PASSWORD_PATTERN } from "../utils/constant";
 import useProfile from "../hooks/useProfile";
 
@@ -9,6 +10,7 @@ function Profile() {
 
   return (
     <Row>
+      <PageTitle title="Profile" />
       <Col md={3}>
         <FormGroup controlId="name" className="my-2">
           <Form.Label>Name</Form.Label>

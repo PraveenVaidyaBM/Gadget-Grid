@@ -10,6 +10,7 @@ import {
 import { LinkContainer } from "react-router-bootstrap";
 import { FaTrash } from "react-icons/fa";
 import Message from "../components/Message";
+import PageTitle from "../components/PageTitle";
 import useCartPage from "../hooks/useCartPage";
 
 function Cart() {
@@ -24,8 +25,9 @@ function Cart() {
 
   return (
     <Row>
+      <PageTitle title="Shopping Cart" />
       <Col md={8}>
-        <h1 style={{ marginBottom: "20px" }}>Shopping Cart</h1>
+        <h1 className="cart-title">Shopping Cart</h1>
         {cartItems.length === 0 ? (
           <Message>
             Your cart is empty{" "}
